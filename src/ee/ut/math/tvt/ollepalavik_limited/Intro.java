@@ -1,4 +1,4 @@
-package ee.ut.math.tvt.õllepalavik_limited;
+package ee.ut.math.tvt.ollepalavik_limited;
 
 public class Intro {
 

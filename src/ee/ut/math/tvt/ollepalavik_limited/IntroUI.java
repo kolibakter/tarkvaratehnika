@@ -1,4 +1,4 @@
-package ee.ut.math.tvt.õllepalavik_limited;
+package ee.ut.math.tvt.ollepalavik_limited;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;

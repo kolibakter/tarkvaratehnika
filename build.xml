@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." name="POS" default="build">
+
+	<!-- Definitions of variables used during the rest of this script -->
+
+	<property file="build.properties"/>
+	<property name="build.dir" value="${basedir}/build"/>
+	<property name="jar.dir" value="${basedir}/jar"/>
+	<property name="build.classes.dir" value="${build.dir}/classes"/>
+	<property name="src.dir" value="${basedir}/src"/>
+	<property name="dist.dir" value="${basedir}/dist"/>
+	<property name="conf.dir" value="${basedir}/etc"/>
+	<property name="doc.dir" value="${build.dir}/doc"/>
+	<property name="test.reports.dir" value="${build.dir}/reports/"/>
+
+	<!-- Definitions of classpath variants used for different tasks -->
+
+	<path id="compile.classpath">
+		<fileset dir="lib">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+
+	<path id="test.classpath">
+		<pathelement location="${build.classes.dir}"/>
+		<!-- configuration -->
+		<pathelement location="${conf.dir}"/>
+		<fileset dir="lib">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+
+	
+	<target name="run" depends="build" description="Run the application">
+		<java classname="ee.ut.math.tvt.ollepalavik_limited.Intro" classpathref="test.classpath" fork="yes"/>
+	</target>
+
+	
+	<target name="build" depends="clean" description="Build the system">
+		<mkdir dir="${build.dir}"/>
+		<mkdir dir="${build.classes.dir}"/>
+		<javac
+            srcdir="${src.dir}"
+            destdir="${build.classes.dir}"
+			includeantruntime="false">
+			<classpath refid="compile.classpath"/>
+		</javac>
+	</target>
+
+	<target name="dist" depends="build" description="Build the .jar file">
+		<mkdir dir="${jar.dir}"/>
+		<jar destfile="${jar.dir}/ollepalavik_limited.jar"
+			basedir="${build.classes.dir}">
+			<manifest>
+				<attribute name="Main-Class" value="ee.ut.math.tvt.ollepalavik_limited.Intro" />
+			</manifest>
+		</jar>
+		<copy file="logo.png" todir="${jar.dir}"/>
+		<copy todir="${jar.dir}">
+			<fileset dir="${basedir}" includes="**.properties"/>
+		</copy>
+		<propertyfile file="${basedir}/version.properties">
+			<entry key="build.revision.number" type="int" operation="+" value="1"/>
+			<entry key="build.number" operation="=" value="${build.revision.number}"/>
+		</propertyfile>
+		<property file="${basedir}/version.properties" prefix="vers"/>
+		<propertyfile file="${basedir}/version.properties">
+			<entry key="build.number" operation="=" value="${vers.build.major.number}.${vers.build.minor.number}.${vers.build.revision.number}"/>
+		</propertyfile>
+	</target>
+	
+	<target name="clean" description="Clean up build system results">
+		<delete dir="${build.dir}"/>
+		<delete dir="${jar.dir}"/>
+	</target>
+	
+	<target name="jrun" depends="dist" description="Run program from .jar file">
+		<java jar="${jar.dir}/ollepalavik_limited.jar" fork="true"/>
+	</target>
+
+</project>
