@@ -77,5 +77,11 @@
 	<target name="jrun" depends="dist" description="Run program from .jar file">
 		<java jar="${jar.dir}/ollepalavik_limited.jar" fork="true"/>
 	</target>
+	
+	<target name="runc" depends="build" description="Run the application (console)">
+		<java classname="ee.ut.math.tvt.ollepalavik_limited.Intro" classpathref="test.classpath" fork="yes">
+			<arg value="console" />
+		</java>
+	</target>
 
 </project>
