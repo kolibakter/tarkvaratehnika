@@ -83,5 +83,51 @@
 			<arg value="console" />
 		</java>
 	</target>
-
+	
+	<target name="git_commit" description="Commit changes to Git repositiory">
+		
+		<input message="Comment: " addproperty="commit.comment" />
+		<input message="Git Username: " addproperty="commit.username" />
+		<input message="Git Passowrd:" addproperty="commit.password" />
+		
+		<exec executable="git">
+			<arg value="add" />
+			<arg value="-A" />
+		</exec>
+		
+		<exec executable="git">
+			<arg value="commit" />
+			<arg value="-m" />
+			<arg value="${commit.comment}" />
+		</exec>
+		
+		<exec executable="git">
+			<arg value="push" />
+			<arg value="https://${commit.username}:${commit.password}@github.com/kolibakter/tarkvaratehnika.git" />
+			<arg value="master" />
+		</exec>
+	</target>
+	
+	<target name="git_tag" description="Add tag to Git repository">
+		
+		<input message="Homework number: " addproperty="tag.number" />
+		<input message="Git username: " addproperty="commit.username" />
+		<input message="Git passowrd: " addproperty="commit.password" />
+	
+		<exec executable="git">
+			<arg value="tag" />
+			<arg value="-a" />
+			<arg value="homework_${tag.number}" />
+			<arg value="-m" />
+			<arg value="Homework ${tag.number}" />
+		</exec>
+	
+		<exec executable="git">
+			<arg value="push" />
+			<arg value="--tags" />
+			<arg value="https://${commit.username}:${commit.password}@github.com/kolibakter/tarkvaratehnika.git" />
+			<arg value="master" />
+		</exec>
+	</target>
+	
 </project>
