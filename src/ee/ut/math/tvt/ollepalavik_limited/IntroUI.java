@@ -34,7 +34,7 @@ public class IntroUI {
 	
 	private void createWindow() {
 		introWindow = new JFrame();
-		introWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		introWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		introWindow.setTitle("hi");
 		introWindow.setSize(380, 270);
 		introWindow.setResizable(false);

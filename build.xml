@@ -4,24 +4,60 @@
 	<!-- Definitions of variables used during the rest of this script -->
 
 	<property file="build.properties"/>
+	
+	<!-- Build -->
 	<property name="build.dir" value="${basedir}/build"/>
-	<property name="jar.dir" value="${basedir}/jar"/>
 	<property name="build.classes.dir" value="${build.dir}/classes"/>
+	<property name="build.test.dir"       value="${build.dir}/test"/>
+	
+	<!-- Source -->
 	<property name="src.dir" value="${basedir}/src"/>
+	<property name="jar.dir" value="${basedir}/jar"/>
 	<property name="dist.dir" value="${basedir}/dist"/>
 	<property name="conf.dir" value="${basedir}/etc"/>
 	<property name="doc.dir" value="${build.dir}/doc"/>
+	<property name="test.dir"   value="${basedir}/test"/>
 	<property name="test.reports.dir" value="${build.dir}/reports/"/>
-
+	<property name="lib.dir" value="${basedir}/lib"/>
+	
+	<!-- DB variables -->
+	<property name="data.dir"	value="${basedir}/data"/>
+	<property name="db.file"	value="${data.dir}/POSdb"/>
+	<property name="db.alias"	value="POS"/>
+	<property name="db.url" 	value="jdbc:hsqldb:hsql://localhost/POS"/>
+	<property name="lib.hibernate.dir"   value="${lib.dir}/hibernate"/>
+	
 	<!-- Definitions of classpath variants used for different tasks -->
-
-	<path id="compile.classpath">
-		<fileset dir="lib">
+	<path id="libs">
+		<fileset dir="${lib.dir}">
 			<include name="*.jar"/>
 		</fileset>
 	</path>
+	
+	<path id="compile.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="*.jar"/>
+		</fileset>
+		
+        <fileset dir="${lib.hibernate.dir}">
+             <include name="*.jar"/>
+        </fileset>
+	</path>
+	
+	<path id="run.classpath">
+	        <pathelement location="${build.classes.dir}"/>
+	        <!-- configuration -->
+	        <pathelement location="${conf.dir}"/>
+	        <fileset dir="${lib.dir}">
+	            <include name="*.jar"/>
+	        </fileset>
 
-	<path id="test.classpath">
+	        <fileset dir="${lib.hibernate.dir}">
+	             <include name="*.jar"/>
+	        </fileset>
+	</path>
+
+	<path id="test-classpath">
 		<pathelement location="${build.classes.dir}"/>
 		<!-- configuration -->
 		<pathelement location="${conf.dir}"/>
@@ -29,22 +65,67 @@
 			<include name="*.jar"/>
 		</fileset>
 	</path>
-
 	
-	<target name="run" depends="build" description="Run the application">
-		<java classname="ee.ut.math.tvt.ollepalavik_limited.Intro" classpathref="test.classpath" fork="yes"/>
+	<target name="init" description="Initialize">
+		<mkdir dir="${build.dir}"/>
+		<mkdir dir="${build.classes.dir}"/>
+		<mkdir dir="${build.test.dir}"/>
 	</target>
-
 	
-	<target name="build" depends="clean" description="Build the system">
+	<target name="build" depends="init" description="Build the system">
 		<mkdir dir="${build.dir}"/>
 		<mkdir dir="${build.classes.dir}"/>
 		<javac
             srcdir="${src.dir}"
             destdir="${build.classes.dir}"
+            debuglevel="lines,vars,source"
+            encoding="utf-8"
+            compiler="modern"
+            target="1.8"
+            source="1.8"
 			includeantruntime="false">
 			<classpath refid="compile.classpath"/>
 		</javac>
+	</target>
+
+	<target name="build-tests" depends="build" description="Build the system">
+		<javac
+            srcdir="${test.dir}"
+            destdir="${build.test.dir}"
+            debug="true"
+            debuglevel="lines,vars,source"
+            encoding="utf-8"
+            compiler="modern"
+            target="1.5"
+            source="1.5"
+        	classpathref="libs"
+        >
+			<classpath>
+				<pathelement path="${build.classes.dir}" />
+			</classpath>
+		</javac>
+	</target>
+	
+	<target name="test" depends="build-tests" description="Run the template application">
+
+		<junit>
+			<classpath refid="test-classpath" />
+
+			<formatter type="brief" usefile="false" />
+			<batchtest>
+				<fileset dir="${build.test.dir}" includes="**/*.class" />
+			</batchtest>
+		</junit>
+
+
+	</target>
+
+
+	<target name="run" depends="build" description="Run the application">
+		<java classname="ee.ut.math.tvt.ollepalavik_limited.Intro" classpathref="test.classpath" fork="yes">
+			<jvmarg value="-Xdebug" />
+			<jvmarg value="-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044" />
+		</java>
 	</target>
 
 	<target name="dist" depends="build" description="Build the .jar file">
@@ -68,39 +149,60 @@
 			<entry key="build.number" operation="=" value="${vers.build.major.number}.${vers.build.minor.number}.${vers.build.revision.number}"/>
 		</propertyfile>
 	</target>
-	
+
 	<target name="clean" description="Clean up build system results">
 		<delete dir="${build.dir}"/>
 		<delete dir="${jar.dir}"/>
 	</target>
-	
+
 	<target name="jrun" depends="dist" description="Run program from .jar file">
 		<java jar="${jar.dir}/ollepalavik_limited.jar" fork="true"/>
 	</target>
-	
+
 	<target name="runc" depends="build" description="Run the application (console)">
 		<java classname="ee.ut.math.tvt.ollepalavik_limited.Intro" classpathref="test.classpath" fork="yes">
 			<arg value="console" />
 		</java>
 	</target>
 	
+	<target name="dbmanager" description="Start the HSQLDB manager">
+	        <java
+	            classname="org.hsqldb.util.DatabaseManagerSwing"
+	            classpathref="run.classpath"
+	            fork="yes"
+	        >
+	            <arg line="--user sa --url ${db.url}" />
+	        </java>
+	    </target>
+
+	    <target name="startdb" description="Start the HSQLDB with the default params">
+	        <java
+	            classname="org.hsqldb.Server"
+	            classpathref="run.classpath"
+	            fork="yes"
+	        >
+	            <arg line="-database.0 '${db.file}' -dbname.0 '${db.alias}'" /> 
+	        </java>
+	</target>
+	
+	<!-- Git -->
 	<target name="git_commit" description="Commit changes to Git repositiory">
-		
+
 		<input message="Comment: " addproperty="commit.comment" />
 		<input message="Git Username: " addproperty="commit.username" />
 		<input message="Git Passowrd:" addproperty="commit.password" />
-		
+
 		<exec executable="git">
 			<arg value="add" />
 			<arg value="-A" />
 		</exec>
-		
+
 		<exec executable="git">
 			<arg value="commit" />
 			<arg value="-m" />
 			<arg value="${commit.comment}" />
 		</exec>
-		
+
 		<exec executable="git">
 			<arg value="push" />
 			<arg value="https://${commit.username}:${commit.password}@github.com/kolibakter/tarkvaratehnika.git" />
@@ -109,11 +211,11 @@
 	</target>
 	
 	<target name="git_tag" description="Add tag to Git repository">
-		
+
 		<input message="Homework number: " addproperty="tag.number" />
 		<input message="Git username: " addproperty="commit.username" />
 		<input message="Git passowrd: " addproperty="commit.password" />
-	
+
 		<exec executable="git">
 			<arg value="tag" />
 			<arg value="-a" />
@@ -121,7 +223,7 @@
 			<arg value="-m" />
 			<arg value="Homework ${tag.number}" />
 		</exec>
-	
+
 		<exec executable="git">
 			<arg value="push" />
 			<arg value="--tags" />
@@ -129,5 +231,5 @@
 			<arg value="master" />
 		</exec>
 	</target>
-	
+
 </project>

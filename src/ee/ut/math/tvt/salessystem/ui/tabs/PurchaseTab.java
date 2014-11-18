@@ -6,6 +6,7 @@ import ee.ut.math.tvt.salessystem.domain.exception.VerificationFailedException;
 import ee.ut.math.tvt.salessystem.domain.controller.SalesDomainController;
 import ee.ut.math.tvt.salessystem.ui.model.SalesSystemModel;
 import ee.ut.math.tvt.salessystem.ui.panels.PurchaseItemPanel;
+import ee.ut.math.tvt.ollepalavik_limited.SubmitPurchase;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -17,6 +18,7 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
@@ -40,6 +42,8 @@ public class PurchaseTab {
   private PurchaseItemPanel purchasePane;
 
   private SalesSystemModel model;
+  
+  private SubmitPurchase submit;
 
 
   public PurchaseTab(SalesDomainController controller,
@@ -98,7 +102,7 @@ public class PurchaseTab {
 
   // Creates the button "New purchase"
   private JButton createNewPurchaseButton() {
-    JButton b = new JButton("New purchase");
+    JButton b = new JButton("New purchase");    
     b.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         newPurchaseButtonClicked();
@@ -177,6 +181,7 @@ public class PurchaseTab {
   /** Event handler for the <code>submit purchase</code> event. */
   protected void submitPurchaseButtonClicked() {
     log.info("Sale complete");
+    //submitPurchase = new SubmitPurchase();
     try {
       log.debug("Contents of the current basket:\n" + model.getCurrentPurchaseTableModel());
       domainController.submitCurrentPurchase(

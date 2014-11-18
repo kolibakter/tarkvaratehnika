@@ -7,6 +7,7 @@ import ee.ut.math.tvt.salessystem.domain.exception.VerificationFailedException;
 import ee.ut.math.tvt.salessystem.domain.controller.SalesDomainController;
 import ee.ut.math.tvt.salessystem.domain.data.SoldItem;
 import ee.ut.math.tvt.salessystem.domain.data.StockItem;
+import ee.ut.math.tvt.salessystem.util.HibernateUtil;
 
 /**
  * Implementation of the sales domain controller.
@@ -24,7 +25,6 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 		// XXX - Cancel current purchase
 	}
 	
-
 	public void startNewPurchase() throws VerificationFailedException {
 		// XXX - Start new purchase
 	}
@@ -44,5 +44,9 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 		dataset.add(beer);
 		
 		return dataset;
+	}
+	
+	public void endSession() {
+	    HibernateUtil.closeSession();
 	}
 }
