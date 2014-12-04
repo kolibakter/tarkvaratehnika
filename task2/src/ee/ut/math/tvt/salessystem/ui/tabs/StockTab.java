@@ -188,5 +188,8 @@ public class StockTab {
             );
         }
     }
-
+    
+    public void refresh() {
+    	model.getWarehouseTableModel().populateWithData(controller.getAllStockItems());
+    }
 }

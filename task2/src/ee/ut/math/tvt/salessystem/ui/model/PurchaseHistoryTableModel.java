@@ -2,14 +2,19 @@ package ee.ut.math.tvt.salessystem.ui.model;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
+import ee.ut.math.tvt.salessystem.domain.data.Client;
 import ee.ut.math.tvt.salessystem.domain.data.Sale;
+import ee.ut.math.tvt.salessystem.domain.data.StockItem;
 
 /**
  * Purchase history model.
  */
 public class PurchaseHistoryTableModel extends SalesSystemTableModel<Sale> {
 	private static final long serialVersionUID = 1L;
+	private List<Sale> rows = new ArrayList<Sale>();
 
 	private static DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 
@@ -48,5 +53,22 @@ public class PurchaseHistoryTableModel extends SalesSystemTableModel<Sale> {
 		}
 
 		return buffer.toString();
+	}
+	
+	@Override
+	public List<Sale> getTableRows() {
+		return this.rows;
+	}
+	
+	@Override
+	public void populateWithData(final List<Sale> data) {
+        rows.clear();
+        rows.addAll(data);
+    }
+	
+	@Override
+	public void addRow(Sale row) {
+		rows.add(row);
+		fireTableDataChanged();
 	}
 }
