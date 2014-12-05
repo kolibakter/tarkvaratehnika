@@ -6,8 +6,6 @@ import java.util.NoSuchElementException;
 
 import org.apache.log4j.Logger;
 
-import ee.ut.math.tvt.salessystem.domain.data.Client;
-import ee.ut.math.tvt.salessystem.domain.data.Sale;
 import ee.ut.math.tvt.salessystem.domain.data.StockItem;
 
 /**

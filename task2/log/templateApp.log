@@ -1,12 +1,18 @@
-2014-12-04 23:38:37,231 [main] DEBUG - Strating SalesSystem with the Swing UI ..
-2014-12-04 23:38:37,700 [main] INFO - 5 items loaded from disk
-2014-12-04 23:38:37,704 [main] INFO - 1 clients loaded from disk
-2014-12-04 23:38:37,719 [main] INFO - 15 Sales loaded from disk
-2014-12-04 23:38:38,082 [main] INFO - SalesSystem started
-2014-12-04 23:38:40,220 [AWT-EventQueue-0] INFO - New sale process started
-2014-12-04 23:38:40,220 [AWT-EventQueue-0] INFO - New purchase started
-2014-12-04 23:38:40,224 [AWT-EventQueue-0] INFO - 1 clients loaded from disk
-2014-12-04 23:38:41,433 [AWT-EventQueue-0] INFO - Client Toomas with ID=1 got selected.
-2014-12-04 23:38:48,983 [AWT-EventQueue-0] INFO - Sale cancelled
-2014-12-04 23:38:48,983 [AWT-EventQueue-0] INFO - Current purchase canceled
-2014-12-04 23:38:50,101 [AWT-EventQueue-0] INFO - SalesSystem closed
+2014-12-05 14:35:08,629 [main] DEBUG - Strating SalesSystem with the Swing UI ..
+2014-12-05 14:35:09,290 [main] INFO - 5 items loaded from disk
+2014-12-05 14:35:09,295 [main] INFO - 1 clients loaded from disk
+2014-12-05 14:35:09,312 [main] INFO - 9 Sales loaded from disk
+2014-12-05 14:35:09,857 [main] INFO - SalesSystem started
+2014-12-05 14:35:12,104 [AWT-EventQueue-0] INFO - 5 items loaded from disk
+2014-12-05 14:35:14,190 [AWT-EventQueue-0] INFO - New sale process started
+2014-12-05 14:35:14,190 [AWT-EventQueue-0] INFO - New purchase started
+2014-12-05 14:35:14,193 [AWT-EventQueue-0] INFO - 1 clients loaded from disk
+2014-12-05 14:35:15,092 [AWT-EventQueue-0] INFO - Client Toomas with ID=1 got selected.
+2014-12-05 14:35:17,251 [AWT-EventQueue-0] DEBUG - Added Layz krõpsud quantity of 19
+2014-12-05 14:35:22,136 [AWT-EventQueue-0] INFO - Sale complete
+2014-12-05 14:35:22,136 [AWT-EventQueue-0] DEBUG - Contents of the current basket:
+Id	Name	Price	Quantity	Sum	
+null	Layz krõpsud	10.5	19	199.5	
+
+2014-12-05 14:35:44,456 [AWT-EventQueue-0] INFO - 10 Sales loaded from disk
+2014-12-05 14:36:00,386 [AWT-EventQueue-0] INFO - SalesSystem closed

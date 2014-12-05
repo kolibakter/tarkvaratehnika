@@ -35,6 +35,7 @@ public class Sale implements DisplayableItem {
 
     /** Empty constructors are used by hibernate */
     public Sale() {
+    	this.soldItems = new HashSet<SoldItem>();
     }
 
     public Sale(List<SoldItem> goods) {
